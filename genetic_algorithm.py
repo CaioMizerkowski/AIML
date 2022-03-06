@@ -10,6 +10,8 @@ class GeneticAlgorithm():
         self._dim = bounds.shape[0]
         self._fitness = fitness
         self._pop_size = self._dim*15
+        self._mr = mutation
+        self._cr = recombination
         self._G = G
         self._g = 0
         self._b = 1.2
@@ -23,6 +25,8 @@ class GeneticAlgorithm():
         self._shape = self.X.shape
 
     def _crossover_arithmetical(self, x):
+        if np.random.uniform() > self._cr:
+            return x
         r = np.random.uniform()
         idx = np.random.choice(range(self._shape[1]), size=1, replace=False)[0]
         return r*x+(1-r)*self.X[idx]
@@ -47,6 +51,8 @@ class GeneticAlgorithm():
         return x
 
     def _mutation_uniform(self, x):
+        if np.random.uniform() > self._mr:
+            return x
         k = np.random.choice(range(self._dim), size=1, replace=False)
         if k < self._dim-1:
             left_x = min(x[k-1], x[k+1])
@@ -59,6 +65,8 @@ class GeneticAlgorithm():
         return new_x
 
     def _mutation_non_uniform(self, x):
+        if np.random.uniform() > self._mr:
+            return x
         k = np.random.choice(range(self._dim), size=1, replace=False)
         d = np.random.choice(range(2), size=1, replace=False)
         if k < self._dim-1:
